@@ -19,19 +19,23 @@ contract TokenManager is Ownable {
     mapping(string => address) public contractAddressERC20;
     mapping(string => address) public contractAddressERC721;
 
-    mapping(address => uint256) public balances;
+    mapping(address => uint256) public balancesETH;
+    mapping(address => uint256) public balancesERC20;
+    mapping(address => uint256) public balancesERC721;
 
     // Contract constructor
     constructor() public {
     }
 
     function depositETH() external payable {
-        //TODO: save mapping with address & amount, to track how much every sender put
         require(msg.value > 0, "Amount must be greater than 0 ethers");
+        balancesETH[msg.sender] += msg.value;
         //emit DepositEther(msg.sender, msg.value);  
     }
-
-    function getBalance() public view returns (uint256) {
-        return payable(address(this)).balance;
+    
+    function balanceOf(address _from) public view returns (uint256) {
+        return balancesETH[_from];
     }
+
+
 }
